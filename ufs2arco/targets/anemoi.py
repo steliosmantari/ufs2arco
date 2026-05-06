@@ -476,18 +476,21 @@ class Anemoi(Target):
         """
         nds = xds.stack(cell2d=xds.attrs["stack_order"])
         nds["cell"] = xr.DataArray(
-            np.arange(len(nds["cell2d"])),
-            coords=nds["cell2d"].coords,
-            dims=nds["cell2d"].dims,
+            np.arange(nds.sizes["cell2d"]),
+            dims="cell2d",
             attrs={
                 "description": f"logical index for 'cell2d', which is a flattened lon x lat array",
             },
         )
         nds = nds.swap_dims({"cell2d": "cell"})
 
-        # For some reason, there's a failure when trying to store this multi-index
-        # it's not needed in Anemoi, so no need to keep it anyway.
-        nds = nds.drop_vars("cell2d")
+        # The cell2d MultiIndex isn't storable in the Anemoi container/fill
+        # workflow. Demote it to plain 1D level coords on `cell` (so e.g.
+        # latitude/longitude survive as per-cell coords) and then drop the
+        # cell2d index variable. Doing it this way avoids xarray's
+        # FutureWarning about deleting a single MultiIndex level.
+        nds = nds.reset_index("cell")
+        nds = nds.drop_vars("cell2d", errors="ignore")
         return nds
 
     def _calc_sample_stats(self, xds: xr.Dataset) -> xr.Dataset:
