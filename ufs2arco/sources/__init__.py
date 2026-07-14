@@ -5,6 +5,7 @@ from .noaa_grib_forecast import NOAAGribForecastData
 from .aws_aorc import AWSAORC
 from .aws_gefs_archive import AWSGEFSArchive
 from .aws_hrrr_archive import AWSHRRRArchive
+from .earthmover_hrrr_analysis import EarthmoverHRRRAnalysis
 from .gcs_era5_1degree import GCSERA5OneDegree
 from .gcs_replay_atmosphere import GCSReplayAtmosphere
 from .gfs_archive import GFSArchive
@@ -15,6 +16,7 @@ from .gfs_archive import GFSArchive
 _recognized = {
     "aws_gefs_archive": "AWSGEFSArchive",
     "aws_hrrr_archive": "AWSHRRRArchive",
+    "earthmover_hrrr_analysis": "EarthmoverHRRRAnalysis",
     "gcs_era5_1degree": "GCSERA5OneDegree",
     "gcs_replay_atmosphere": "GCSReplayAtmosphere",
     "gfs_archive": "GFSArchive",
